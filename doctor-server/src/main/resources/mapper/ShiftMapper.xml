@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.it.study.mapper.ShiftMapper">
+
+    <resultMap id="BaseResultMap" type="com.it.study.domain.entity.Shift">
+        <id property="shiftId" column="shift_id" jdbcType="INTEGER"/>
+        <result property="date" column="date" jdbcType="TIMESTAMP"/>
+        <result property="dcId" column="dc_id" jdbcType="INTEGER"/>
+        <result property="dId" column="d_id" jdbcType="INTEGER"/>
+        <result property="dDoctorId" column="d_doctor_id" jdbcType="INTEGER"/>
+        <result property="status" column="status" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        shift_id
+        ,date,dc_id,
+        d_id,d_doctor_id,status
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from shift
+        where shift_id = #{shiftId,jdbcType=INTEGER}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete
+        from shift
+        where shift_id = #{shiftId,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" keyColumn="shift_id" keyProperty="shiftId" parameterType="com.it.study.domain.entity.Shift"
+            useGeneratedKeys="true">
+        insert into shift
+        ( shift_id, date, dc_id
+        , d_id, d_doctor_id, status)
+        values ( #{shiftId,jdbcType=INTEGER}, #{date,jdbcType=TIMESTAMP}, #{dcId,jdbcType=INTEGER}
+               , #{dId,jdbcType=INTEGER}, #{dDoctorId,jdbcType=INTEGER}, #{status,jdbcType=INTEGER})
+    </insert>
+    <insert id="insertSelective" keyColumn="shift_id" keyProperty="shiftId"
+            parameterType="com.it.study.domain.entity.Shift" useGeneratedKeys="true">
+        insert into shift
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="shiftId != null">shift_id,</if>
+            <if test="date != null">date,</if>
+            <if test="dcId != null">dc_id,</if>
+            <if test="dId != null">d_id,</if>
+            <if test="dDoctorId != null">d_doctor_id,</if>
+            <if test="status != null">status,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="shiftId != null">#{shiftId,jdbcType=INTEGER},</if>
+            <if test="date != null">#{date,jdbcType=TIMESTAMP},</if>
+            <if test="dcId != null">#{dcId,jdbcType=INTEGER},</if>
+            <if test="dId != null">#{dId,jdbcType=INTEGER},</if>
+            <if test="dDoctorId != null">#{dDoctorId,jdbcType=INTEGER},</if>
+            <if test="status != null">#{status,jdbcType=INTEGER},</if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.it.study.domain.entity.Shift">
+        update shift
+        <set>
+            <if test="date != null">
+                date = #{date,jdbcType=TIMESTAMP},
+            </if>
+            <if test="dcId != null">
+                dc_id = #{dcId,jdbcType=INTEGER},
+            </if>
+            <if test="dId != null">
+                d_id = #{dId,jdbcType=INTEGER},
+            </if>
+            <if test="dDoctorId != null">
+                d_doctor_id = #{dDoctorId,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+        </set>
+        where shift_id = #{shiftId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.it.study.domain.entity.Shift">
+        update shift
+        set date        = #{date,jdbcType=TIMESTAMP},
+            dc_id       = #{dcId,jdbcType=INTEGER},
+            d_id        = #{dId,jdbcType=INTEGER},
+            d_doctor_id = #{dDoctorId,jdbcType=INTEGER},
+            status      = #{status,jdbcType=INTEGER}
+        where shift_id = #{shiftId,jdbcType=INTEGER}
+    </update>
+
+    <resultMap id="shiftResultMap" type="com.it.study.domain.entity.Shift">
+        <result property="dcId" column="dc_id"/>
+        <result property="dcName" column="dc_name"/>
+        <result property="dId" column="d_id"/>
+        <result property="shiftId" column="shift_id"/>
+        <result property="dpName" column="dp_name"/>
+        <result property="dAddress" column="d_address"/>
+        <result property="dPhone" column="d_phone"/>
+        <result property="dDoctorId" column="d_doctor_id"/>
+        <result property="realName" column="real_name"/>
+        <result property="sex" column="sex"/>
+        <result property="email" column="email"/>
+        <result property="mobile" column="mobile"/>
+        <result property="date" column="date"/>
+        <result property="time" column="time"/>
+        <result property="status" column="status"/>
+    </resultMap>
+    <select id="shiftList" parameterType="java.lang.Long" resultMap="shiftResultMap">
+        SELECT dc.dc_id,
+               dc.dc_name,
+               d.d_id,
+               st.shift_id,
+               d.dp_name,
+               d.d_address,
+               d.d_phone,
+               s.d_doctor_id,
+               sys.real_name,
+               sys.sex,
+               sys.mobile,
+               sys.email,
+               s.DATE,
+               st.TIME,
+               s.STATUS
+        FROM shift_time st
+                 JOIN shift s ON st.shift_id = s.shift_id
+                 JOIN sys_users sys ON sys.id = s.d_doctor_id
+                 JOIN department d ON d.d_id = sys.d_id
+                 JOIN department_category dc ON dc.dc_id = d.dc_child_id
+    </select>
+
+    <insert id="shiftTime" parameterType="com.it.study.domain.entity.Shift">
+        insert into shift_time (shift_id, time, count) value (#{shiftId}, #{time}, 1)
+    </insert>
+
+    <!--    <select id="getLatestShiftId" parameterType="java.lang.Integer" resultMap="BaseResultMap">-->
+    <!--        SELECT shift_id-->
+    <!--        FROM shift-->
+    <!--        ORDER BY shift_id DESC LIMIT 1;-->
+    <!--    </select>-->
+
+    <insert id="insertShift" useGeneratedKeys="true" keyProperty="shiftId" keyColumn="shift_id">
+        insert into shift (date, dc_id, d_id, d_doctor_id, status) value (#{date}, #{dcId}, #{dId}, #{dDoctorId}, 1)
+    </insert>
+    <resultMap id="seepaibanResultMap" type="com.it.study.domain.entity.Shift">
+        <result property="shiftId" column="shift_id"></result>
+        <result property="date" column="date"></result>
+        <result property="dcId" column="dc_id"></result>
+        <result property="dId" column="d_id"></result>
+        <result property="dDoctorId" column="d_doctor_id"></result>
+        <result property="time" column="time"></result>
+        <result property="count" column="count"></result>
+    </resultMap>
+    <select id="seepaiban" resultMap="seepaibanResultMap">
+        SELECT
+            s.shift_id,
+            s.date,
+            s.dc_id,
+            s.d_id,
+            s.d_doctor_id,
+            st.time,
+            st.count
+        FROM
+            shift s
+                JOIN
+            shift_time st ON s.shift_id = st.shift_id -- 替换为实际的排班ID
+    </select>
+</mapper>

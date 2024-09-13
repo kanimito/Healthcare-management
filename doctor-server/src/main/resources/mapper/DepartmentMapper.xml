@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.it.study.mapper.DepartmentMapper">
+
+    <resultMap id="BaseResultMap" type="com.it.study.domain.entity.Department">
+        <id property="dId" column="d_id" jdbcType="INTEGER"/>
+        <result property="dpName" column="dp_name" jdbcType="VARCHAR"/>
+        <result property="dAddress" column="d_address" jdbcType="VARCHAR"/>
+        <result property="dPhone" column="d_phone" jdbcType="VARCHAR"/>
+        <result property="dcId" column="dc_id" jdbcType="INTEGER"/>
+        <result property="dcChildId" column="dc_child_id" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        d_id
+        ,dp_name,d_address,
+        d_phone,dc_id,dc_child_id
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from department
+        where d_id = #{dId,jdbcType=INTEGER}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete
+        from department
+        where d_id = #{dId,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" keyColumn="d_id" keyProperty="dId" parameterType="com.it.study.domain.entity.Department"
+            useGeneratedKeys="true">
+        insert into department
+        ( d_id, dp_name, d_address
+        , d_phone, dc_id, dc_child_id)
+        values ( #{dId,jdbcType=INTEGER}, #{dpName,jdbcType=VARCHAR}, #{dAddress,jdbcType=VARCHAR}
+               , #{dPhone,jdbcType=VARCHAR}, #{dcId,jdbcType=INTEGER}, #{dcChildId,jdbcType=INTEGER})
+    </insert>
+    <insert id="insertSelective" keyColumn="d_id" keyProperty="dId"
+            parameterType="com.it.study.domain.entity.Department" useGeneratedKeys="true">
+        insert into department
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="dId != null">d_id,</if>
+            <if test="dpName != null">dp_name,</if>
+            <if test="dAddress != null">d_address,</if>
+            <if test="dPhone != null">d_phone,</if>
+            <if test="dcId != null">dc_id,</if>
+            <if test="dcChildId != null">dc_child_id,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="dId != null">#{dId,jdbcType=INTEGER},</if>
+            <if test="dpName != null">#{dpName,jdbcType=VARCHAR},</if>
+            <if test="dAddress != null">#{dAddress,jdbcType=VARCHAR},</if>
+            <if test="dPhone != null">#{dPhone,jdbcType=VARCHAR},</if>
+            <if test="dcId != null">#{dcId,jdbcType=INTEGER},</if>
+            <if test="dcChildId != null">#{dcChildId,jdbcType=INTEGER},</if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.it.study.domain.entity.Department">
+        update department
+        <set>
+            <if test="dpName != null">
+                dp_name = #{dpName,jdbcType=VARCHAR},
+            </if>
+            <if test="dAddress != null">
+                d_address = #{dAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="dPhone != null">
+                d_phone = #{dPhone,jdbcType=VARCHAR},
+            </if>
+            <if test="dcId != null">
+                dc_id = #{dcId,jdbcType=INTEGER},
+            </if>
+            <if test="dcChildId != null">
+                dc_child_id = #{dcChildId,jdbcType=INTEGER},
+            </if>
+        </set>
+        where d_id = #{dId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.it.study.domain.entity.Department">
+        update department
+        set dp_name     = #{dpName,jdbcType=VARCHAR},
+            d_address   = #{dAddress,jdbcType=VARCHAR},
+            d_phone     = #{dPhone,jdbcType=VARCHAR},
+            dc_id       = #{dcId,jdbcType=INTEGER},
+            dc_child_id = #{dcChildId,jdbcType=INTEGER}
+        where d_id = #{dId,jdbcType=INTEGER}
+    </update>
+
+    <select id="selectAllDepartment1" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM department
+        WHERE dc_id =1
+    </select>
+
+    <select id="selectAllDepartment2" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM department
+        WHERE dc_id = 2
+    </select>
+
+    <select id="selectAllDepartment3" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM department
+        WHERE dc_id = 3
+    </select>
+
+    <select id="selectAllDepartment4" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM department
+        WHERE dc_id = 4
+    </select>
+
+    <select id="selectAllDepartment5" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM department
+        WHERE dc_id = 5
+    </select>
+
+    <select id="selectAllDepartment6" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM department
+        WHERE dc_id = 6
+    </select>
+
+    <select id="selectAllDepartment7" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM department
+        WHERE dc_id = 7
+    </select>
+
+    <select id="selectAllDepartment" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM department
+    </select>
+</mapper>

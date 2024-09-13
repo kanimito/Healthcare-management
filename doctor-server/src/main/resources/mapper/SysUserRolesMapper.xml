@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.it.study.mapper.SysUserRolesMapper">
+
+    <resultMap id="UserWithRolesMap" type="com.it.study.domain.entity.SysUserRoles">
+        <id property="id" column="id" jdbcType="INTEGER"/>
+        <result property="username" column="username" jdbcType="VARCHAR"/>
+        <result property="password" column="password" jdbcType="VARCHAR"/>
+        <result property="sex" column="sex" jdbcType="TINYINT"/>
+        <result property="realName" column="real_name" jdbcType="VARCHAR"/>
+        <result property="userCode" column="user_code" jdbcType="VARCHAR"/>
+        <result property="accountType" column="account_type" jdbcType="VARCHAR"/>
+        <result property="email" column="email" jdbcType="VARCHAR"/>
+        <result property="mobile" column="mobile" jdbcType="VARCHAR"/>
+        <result property="status" column="status" jdbcType="TINYINT"/>
+        <result property="createdTime" column="created_time" jdbcType="TIMESTAMP"/>
+        <result property="modifiedTime" column="modified_time" jdbcType="TIMESTAMP"/>
+        <result property="gmtAddUser" column="gmt_add_user" jdbcType="VARCHAR"/>
+        <result property="gmtUpdateUser" column="gmt_update_user" jdbcType="VARCHAR"/>
+        <!-- 角色信息 -->
+        <result property="roleName" column="name" jdbcType="VARCHAR"/>
+        <result property="roleNote" column="note" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="selectUsersWithRoles" resultMap="UserWithRolesMap">
+        SELECT su.*, sr.name, sr.note
+        FROM sys_user_roles sur
+                 INNER JOIN sys_users su ON su.id = sur.user_id
+                 INNER JOIN sys_roles sr ON sr.id = sur.role_id
+    </select>
+
+    <insert id="insertUserRoles" keyProperty="id" keyColumn="id" parameterType="com.it.study.domain.entity.SysUserRoles"
+            useGeneratedKeys="true">
+        INSERT INTO sys_user_roles (user_id, role_id)
+        VALUES (#{userId}, #{roleId})
+    </insert>
+</mapper>

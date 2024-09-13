@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.it.study.mapper.RecipelMapper">
+
+    <resultMap id="BaseResultMap" type="com.it.study.domain.entity.Recipel">
+            <id property="rId" column="r_id" jdbcType="INTEGER"/>
+            <result property="rgNum" column="rg_num" jdbcType="INTEGER"/>
+            <result property="pPatitentId" column="p_patitent_id" jdbcType="VARCHAR"/>
+            <result property="pName" column="p_name" jdbcType="VARCHAR"/>
+            <result property="dDoctorId" column="d_doctor_id" jdbcType="VARCHAR"/>
+            <result property="dName" column="d_name" jdbcType="VARCHAR"/>
+            <result property="rAdvice" column="r_advice" jdbcType="VARCHAR"/>
+            <result property="doId" column="do_id" jdbcType="INTEGER"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        r_id,rg_num,p_patitent_id,
+        p_name,d_doctor_id,d_name,
+        r_advice,do_id,create_time
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from recipel
+        where  r_id = #{rId,jdbcType=INTEGER} 
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete from recipel
+        where  r_id = #{rId,jdbcType=INTEGER} 
+    </delete>
+    <insert id="insert" keyColumn="r_id" keyProperty="rId" parameterType="com.it.study.domain.entity.Recipel" useGeneratedKeys="true">
+        insert into recipel
+        ( r_id,rg_num,p_patitent_id
+        ,p_name,d_doctor_id,d_name
+        ,r_advice,do_id,create_time
+        )
+        values (#{rId,jdbcType=INTEGER},#{rgNum,jdbcType=INTEGER},#{pPatitentId,jdbcType=VARCHAR}
+        ,#{pName,jdbcType=VARCHAR},#{dDoctorId,jdbcType=VARCHAR},#{dName,jdbcType=VARCHAR}
+        ,#{rAdvice,jdbcType=VARCHAR},#{doId,jdbcType=INTEGER},#{createTime,jdbcType=TIMESTAMP}
+        )
+    </insert>
+    <insert id="insertSelective" keyColumn="r_id" keyProperty="rId" parameterType="com.it.study.domain.entity.Recipel" useGeneratedKeys="true">
+        insert into recipel
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="rId != null">r_id,</if>
+                <if test="rgNum != null">rg_num,</if>
+                <if test="pPatitentId != null">p_patitent_id,</if>
+                <if test="pName != null">p_name,</if>
+                <if test="dDoctorId != null">d_doctor_id,</if>
+                <if test="dName != null">d_name,</if>
+                <if test="rAdvice != null">r_advice,</if>
+                <if test="doId != null">do_id,</if>
+                <if test="createTime != null">create_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="rId != null">#{rId,jdbcType=INTEGER},</if>
+                <if test="rgNum != null">#{rgNum,jdbcType=INTEGER},</if>
+                <if test="pPatitentId != null">#{pPatitentId,jdbcType=VARCHAR},</if>
+                <if test="pName != null">#{pName,jdbcType=VARCHAR},</if>
+                <if test="dDoctorId != null">#{dDoctorId,jdbcType=VARCHAR},</if>
+                <if test="dName != null">#{dName,jdbcType=VARCHAR},</if>
+                <if test="rAdvice != null">#{rAdvice,jdbcType=VARCHAR},</if>
+                <if test="doId != null">#{doId,jdbcType=INTEGER},</if>
+                <if test="createTime != null">#{createTime,jdbcType=TIMESTAMP},</if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.it.study.domain.entity.Recipel">
+        update recipel
+        <set>
+                <if test="rgNum != null">
+                    rg_num = #{rgNum,jdbcType=INTEGER},
+                </if>
+                <if test="pPatitentId != null">
+                    p_patitent_id = #{pPatitentId,jdbcType=VARCHAR},
+                </if>
+                <if test="pName != null">
+                    p_name = #{pName,jdbcType=VARCHAR},
+                </if>
+                <if test="dDoctorId != null">
+                    d_doctor_id = #{dDoctorId,jdbcType=VARCHAR},
+                </if>
+                <if test="dName != null">
+                    d_name = #{dName,jdbcType=VARCHAR},
+                </if>
+                <if test="rAdvice != null">
+                    r_advice = #{rAdvice,jdbcType=VARCHAR},
+                </if>
+                <if test="doId != null">
+                    do_id = #{doId,jdbcType=INTEGER},
+                </if>
+                <if test="createTime != null">
+                    create_time = #{createTime,jdbcType=TIMESTAMP},
+                </if>
+        </set>
+        where   r_id = #{rId,jdbcType=INTEGER} 
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.it.study.domain.entity.Recipel">
+        update recipel
+        set 
+            rg_num =  #{rgNum,jdbcType=INTEGER},
+            p_patitent_id =  #{pPatitentId,jdbcType=VARCHAR},
+            p_name =  #{pName,jdbcType=VARCHAR},
+            d_doctor_id =  #{dDoctorId,jdbcType=VARCHAR},
+            d_name =  #{dName,jdbcType=VARCHAR},
+            r_advice =  #{rAdvice,jdbcType=VARCHAR},
+            do_id =  #{doId,jdbcType=INTEGER},
+            create_time =  #{createTime,jdbcType=TIMESTAMP}
+        where   r_id = #{rId,jdbcType=INTEGER} 
+    </update>
+
+    <resultMap id="registerResultMap1" type="com.it.study.domain.entity.Register">
+        <id property="pPatientId" column="p_patitent_id"/>
+        <result property="pName" column="p_name"/>
+        <result property="pSex" column="p_sex"/>
+        <result property="pAge" column="p_age"/>
+        <result property="dName" column="d_name"/>
+        <result property="rAdvice" column="r_advice"/>
+        <result property="rgCreatetime" column="create_time"/>
+    </resultMap>
+    <select id="selectAllDoctorRecord" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        SELECT rec.p_patitent_id, rec.p_name, reg.p_sex, reg.p_age, rec.d_name, rec.r_advice, rec.create_time
+        FROM recipel rec
+                 JOIN register reg ON rec.p_patitent_id = reg.p_patient_id
+    </select>
+
+    <insert id="AddYiZhu" parameterType="com.it.study.domain.entity.Recipel">
+        INSERT INTO recipel (rg_num,p_name,p_patitent_id,r_advice)
+        VALUES (#{rgNum,jdbcType=INTEGER},#{pPatitentId,jdbcType=VARCHAR}
+               ,#{pName,jdbcType=VARCHAR},#{rAdvice,jdbcType=VARCHAR})
+    </insert>
+
+    <update id="buquanyizhu" parameterType="map">
+        UPDATE recipel
+        SET do_id =#{doId,jdbcType=INTEGER},
+            d_doctor_id=#{dDoctorId,jdbcType=VARCHAR},
+            d_name=#{dName,jdbcType=VARCHAR},
+            create_time = NOW()
+        WHERE rg_num=#{rgNum,jdbcType=INTEGER};
+    </update>
+    <select id="selectAllByDateAndUser" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        FROM recipel
+        WHERE p_patitent_id = #{patientId} AND DATE(create_time) = #{selDate};
+    </select>
+<!--    <select id="dingdanid" parameterType="java.lang.Long" resultMap="BaseResultMap">-->
+<!--        select do_id from drugs_order order by do_id desc limit 1-->
+<!--    </select>-->
+</mapper>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.it.study.mapper.DepartmentCategoryMapper">
+
+    <resultMap id="BaseResultMap" type="com.it.study.domain.entity.DepartmentCategory">
+        <id property="dcId" column="dc_id" jdbcType="INTEGER"/>
+        <result property="dcName" column="dc_name" jdbcType="VARCHAR"/>
+        <result property="dcParentId" column="dc_parent_id" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        dc_id
+        ,dc_name,dc_parent_id
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from department_category
+        where dc_id = #{dcId,jdbcType=INTEGER}
+    </select>
+
+    <select id="selectAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from department_category
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete
+        from department_category
+        where dc_id = #{dcId,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" keyColumn="dc_id" keyProperty="dcId"
+            parameterType="com.it.study.domain.entity.DepartmentCategory" useGeneratedKeys="true">
+        insert into department_category
+            (dc_id, dc_name, dc_parent_id)
+        values (#{dcId,jdbcType=INTEGER}, #{dcName,jdbcType=VARCHAR}, #{dcParentId,jdbcType=INTEGER})
+    </insert>
+    <insert id="insertSelective" keyColumn="dc_id" keyProperty="dcId"
+            parameterType="com.it.study.domain.entity.DepartmentCategory" useGeneratedKeys="true">
+        insert into department_category
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="dcId != null">dc_id,</if>
+            <if test="dcName != null">dc_name,</if>
+            <if test="dcParentId != null">dc_parent_id,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="dcId != null">#{dcId,jdbcType=INTEGER},</if>
+            <if test="dcName != null">#{dcName,jdbcType=VARCHAR},</if>
+            <if test="dcParentId != null">#{dcParentId,jdbcType=INTEGER},</if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.it.study.domain.entity.DepartmentCategory">
+        update department_category
+        <set>
+            <if test="dcName != null">
+                dc_name = #{dcName,jdbcType=VARCHAR},
+            </if>
+            <if test="dcParentId != null">
+                dc_parent_id = #{dcParentId,jdbcType=INTEGER},
+            </if>
+        </set>
+        where dc_id = #{dcId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.it.study.domain.entity.DepartmentCategory">
+        update department_category
+        set dc_name      = #{dcName,jdbcType=VARCHAR},
+            dc_parent_id = #{dcParentId,jdbcType=INTEGER}
+        where dc_id = #{dcId,jdbcType=INTEGER}
+    </update>
+
+    <select id="selectAllDepartmentCategory" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM department_category
+    </select>
+
+</mapper>

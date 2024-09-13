@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.it.study.mapper.DrugsOrderDetailMapper">
+
+    <resultMap id="BaseResultMap" type="com.it.study.domain.entity.DrugsOrderDetail">
+            <id property="dodId" column="dod_id" jdbcType="INTEGER"/>
+            <result property="doId" column="do_id" jdbcType="INTEGER"/>
+            <result property="drugsId" column="drugs_id" jdbcType="INTEGER"/>
+            <result property="drugsQuantity" column="drugs_quantity" jdbcType="INTEGER"/>
+            <result property="dodCost" column="dod_cost" jdbcType="DOUBLE"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        dod_id,do_id,drugs_id,
+        drugs_quantity,dod_cost
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from drugs_order_detail
+        where dod_id = #{dodId,jdbcType=INTEGER}
+    </select>
+
+    <select id="selectDrugOrder" resultType="com.it.study.domain.dto.DrugDTO">
+        SELECT dod.*, do_.*, d.drug_name, d.drug_unit
+        FROM drugs_order_detail dod
+                 INNER JOIN drugs_order do_ ON dod.do_id = do_.do_id
+                 INNER JOIN drugs d
+                            ON d.drug_id = dod.drugs_id
+                 INNER JOIN recipel r
+                            ON r.do_id = dod.do_id
+        WHERE r.r_id = #{rid};
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete
+        from drugs_order_detail
+        where dod_id = #{dodId,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" keyColumn="dod_id" keyProperty="dodId"
+            parameterType="com.it.study.domain.entity.DrugsOrderDetail" useGeneratedKeys="true">
+        insert into drugs_order_detail
+        ( dod_id, do_id, drugs_id
+        , drugs_quantity, dod_cost)
+        values ( #{dodId,jdbcType=INTEGER}, #{doId,jdbcType=INTEGER}, #{drugsId,jdbcType=INTEGER}
+               , #{drugsQuantity,jdbcType=INTEGER}, #{dodCost,jdbcType=DOUBLE})
+    </insert>
+    <insert id="insertSelective" keyColumn="dod_id" keyProperty="dodId"
+            parameterType="com.it.study.domain.entity.DrugsOrderDetail" useGeneratedKeys="true">
+        insert into drugs_order_detail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="dodId != null">dod_id,</if>
+            <if test="doId != null">do_id,</if>
+            <if test="drugsId != null">drugs_id,</if>
+            <if test="drugsQuantity != null">drugs_quantity,</if>
+            <if test="dodCost != null">dod_cost,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="dodId != null">#{dodId,jdbcType=INTEGER},</if>
+            <if test="doId != null">#{doId,jdbcType=INTEGER},</if>
+            <if test="drugsId != null">#{drugsId,jdbcType=INTEGER},</if>
+            <if test="drugsQuantity != null">#{drugsQuantity,jdbcType=INTEGER},</if>
+            <if test="dodCost != null">#{dodCost,jdbcType=DOUBLE},</if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.it.study.domain.entity.DrugsOrderDetail">
+        update drugs_order_detail
+        <set>
+                <if test="doId != null">
+                    do_id = #{doId,jdbcType=INTEGER},
+                </if>
+                <if test="drugsId != null">
+                    drugs_id = #{drugsId,jdbcType=INTEGER},
+                </if>
+                <if test="drugsQuantity != null">
+                    drugs_quantity = #{drugsQuantity,jdbcType=INTEGER},
+                </if>
+                <if test="dodCost != null">
+                    dod_cost = #{dodCost,jdbcType=DOUBLE},
+                </if>
+        </set>
+        where   dod_id = #{dodId,jdbcType=INTEGER} 
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.it.study.domain.entity.DrugsOrderDetail">
+        update drugs_order_detail
+        set 
+            do_id =  #{doId,jdbcType=INTEGER},
+            drugs_id =  #{drugsId,jdbcType=INTEGER},
+            drugs_quantity =  #{drugsQuantity,jdbcType=INTEGER},
+            dod_cost =  #{dodCost,jdbcType=DOUBLE}
+        where   dod_id = #{dodId,jdbcType=INTEGER} 
+    </update>
+</mapper>

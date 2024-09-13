@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.it.study.mapper.SysRolesMapper">
+
+    <resultMap id="BaseResultMap" type="com.it.study.domain.entity.SysRoles">
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="note" column="note" jdbcType="VARCHAR"/>
+        <result property="createdTime" column="created_time" jdbcType="TIMESTAMP"/>
+        <result property="modifiedTime" column="modified_time" jdbcType="TIMESTAMP"/>
+        <result property="gmtAddUser" column="gmt_add_user" jdbcType="VARCHAR"/>
+        <result property="gmtUpdateUser" column="gmt_update_user" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id
+        ,name,note,
+        created_time,modified_time,gmt_add_user,
+        gmt_update_user
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_roles
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <select id="selectRoles" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_roles
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete
+        from sys_roles
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.it.study.domain.entity.SysRoles"
+            useGeneratedKeys="true">
+        insert into sys_roles
+        ( id, name, note
+        , created_time, modified_time, gmt_add_user
+        , gmt_update_user)
+        values ( #{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{note,jdbcType=VARCHAR}
+               , curdate(), curdate(), 'admin'
+               , 'admin')
+    </insert>
+    <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.it.study.domain.entity.SysRoles"
+            useGeneratedKeys="true">
+        insert into sys_roles
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="name != null">name,</if>
+            <if test="note != null">note,</if>
+            <if test="createdTime != null">created_time,</if>
+            <if test="modifiedTime != null">modified_time,</if>
+            <if test="gmtAddUser != null">gmt_add_user,</if>
+            <if test="gmtUpdateUser != null">gmt_update_user,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id,jdbcType=BIGINT},</if>
+            <if test="name != null">#{name,jdbcType=VARCHAR},</if>
+            <if test="note != null">#{note,jdbcType=VARCHAR},</if>
+            <if test="createdTime != null">#{createdTime,jdbcType=TIMESTAMP},</if>
+            <if test="modifiedTime != null">#{modifiedTime,jdbcType=TIMESTAMP},</if>
+            <if test="gmtAddUser != null">#{gmtAddUser,jdbcType=VARCHAR},</if>
+            <if test="gmtUpdateUser != null">#{gmtUpdateUser,jdbcType=VARCHAR},</if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.it.study.domain.entity.SysRoles">
+        update sys_roles
+        <set>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="note != null">
+                note = #{note,jdbcType=VARCHAR},
+            </if>
+            <if test="createdTime != null">
+                created_time = #{createdTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifiedTime != null">
+                modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="gmtAddUser != null">
+                gmt_add_user = #{gmtAddUser,jdbcType=VARCHAR},
+            </if>
+            <if test="gmtUpdateUser != null">
+                gmt_update_user = #{gmtUpdateUser,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.it.study.domain.entity.SysRoles">
+        update sys_roles
+        set name            = #{name,jdbcType=VARCHAR},
+            note            = #{note,jdbcType=VARCHAR},
+            created_time    = #{createdTime,jdbcType=TIMESTAMP},
+            modified_time   = #{modifiedTime,jdbcType=TIMESTAMP},
+            gmt_add_user    = #{gmtAddUser,jdbcType=VARCHAR},
+            gmt_update_user = #{gmtUpdateUser,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+</mapper>

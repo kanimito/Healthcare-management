@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.it.study.mapper.DrugsOrderMapper">
+
+    <resultMap id="BaseResultMap" type="com.it.study.domain.entity.DrugsOrder">
+            <id property="doId" column="do_id" jdbcType="INTEGER"/>
+            <result property="pPatitentId" column="p_patitent_id" jdbcType="VARCHAR"/>
+            <result property="pName" column="p_name" jdbcType="VARCHAR"/>
+            <result property="doCreatetime" column="do_createtime" jdbcType="TIMESTAMP"/>
+            <result property="doStatus" column="do_status" jdbcType="INTEGER"/>
+            <result property="doCost" column="do_cost" jdbcType="DOUBLE"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        do_id,p_patitent_id,p_name,
+        do_createtime,do_status,do_cost
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from drugs_order
+        where  do_id = #{doId,jdbcType=INTEGER} 
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete from drugs_order
+        where  do_id = #{doId,jdbcType=INTEGER} 
+    </delete>
+    <insert id="insert" keyColumn="do_id" keyProperty="doId" parameterType="com.it.study.domain.entity.DrugsOrder" useGeneratedKeys="true">
+        insert into drugs_order
+        ( do_id,p_patitent_id,p_name
+        ,do_createtime,do_status,do_cost
+        )
+        values (#{doId,jdbcType=INTEGER},#{pPatitentId,jdbcType=VARCHAR},#{pName,jdbcType=VARCHAR}
+        ,#{doCreatetime,jdbcType=TIMESTAMP},#{doStatus,jdbcType=INTEGER},#{doCost,jdbcType=DOUBLE}
+        )
+    </insert>
+    <insert id="insertSelective" keyColumn="do_id" keyProperty="doId" parameterType="com.it.study.domain.entity.DrugsOrder" useGeneratedKeys="true">
+        insert into drugs_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="doId != null">do_id,</if>
+                <if test="pPatitentId != null">p_patitent_id,</if>
+                <if test="pName != null">p_name,</if>
+                <if test="doCreatetime != null">do_createtime,</if>
+                <if test="doStatus != null">do_status,</if>
+                <if test="doCost != null">do_cost,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="doId != null">#{doId,jdbcType=INTEGER},</if>
+                <if test="pPatitentId != null">#{pPatitentId,jdbcType=VARCHAR},</if>
+                <if test="pName != null">#{pName,jdbcType=VARCHAR},</if>
+                <if test="doCreatetime != null">#{doCreatetime,jdbcType=TIMESTAMP},</if>
+                <if test="doStatus != null">#{doStatus,jdbcType=INTEGER},</if>
+                <if test="doCost != null">#{doCost,jdbcType=DOUBLE},</if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.it.study.domain.entity.DrugsOrder">
+        update drugs_order
+        <set>
+                <if test="pPatitentId != null">
+                    p_patitent_id = #{pPatitentId,jdbcType=VARCHAR},
+                </if>
+                <if test="pName != null">
+                    p_name = #{pName,jdbcType=VARCHAR},
+                </if>
+                <if test="doCreatetime != null">
+                    do_createtime = #{doCreatetime,jdbcType=TIMESTAMP},
+                </if>
+                <if test="doStatus != null">
+                    do_status = #{doStatus,jdbcType=INTEGER},
+                </if>
+                <if test="doCost != null">
+                    do_cost = #{doCost,jdbcType=DOUBLE},
+                </if>
+        </set>
+        where   do_id = #{doId,jdbcType=INTEGER} 
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.it.study.domain.entity.DrugsOrder">
+        update drugs_order
+        set 
+            p_patitent_id =  #{pPatitentId,jdbcType=VARCHAR},
+            p_name =  #{pName,jdbcType=VARCHAR},
+            do_createtime =  #{doCreatetime,jdbcType=TIMESTAMP},
+            do_status =  #{doStatus,jdbcType=INTEGER},
+            do_cost =  #{doCost,jdbcType=DOUBLE}
+        where   do_id = #{doId,jdbcType=INTEGER} 
+    </update>
+
+    <insert id="insertOrder" useGeneratedKeys="true" keyProperty="doId" keyColumn="do_id">
+        INSERT INTO drugs_order (p_patitent_id, p_name, do_createtime, do_status, do_cost)
+        VALUES (#{pPatitentId,jdbcType=VARCHAR}, #{pName,jdbcType=VARCHAR}, NOW(),#{doStatus,jdbcType=INTEGER}, #{doCost,jdbcType=DOUBLE});
+    </insert>
+
+    <insert id="insertOrderDetails" parameterType="com.it.study.domain.entity.DrugsOrderDetail">
+        INSERT INTO drugs_order_detail (do_id, drugs_id, drugs_quantity, dod_cost)
+        VALUES
+            (#{doId}, #{drugId}, #{quantity}, #{dodCost})
+    </insert>
+</mapper>

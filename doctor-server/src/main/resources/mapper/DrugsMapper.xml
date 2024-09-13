@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.it.study.mapper.DrugsMapper">
+
+    <resultMap id="BaseResultMap" type="com.it.study.domain.entity.Drugs">
+            <id property="drugId" column="drug_id" jdbcType="VARCHAR"/>
+            <result property="drugName" column="drug_name" jdbcType="VARCHAR"/>
+            <result property="drugIntoPrice" column="drug_into_price" jdbcType="DOUBLE"/>
+            <result property="drugExitPrice" column="drug_exit_price" jdbcType="DOUBLE"/>
+            <result property="drugQuantity" column="drug_quantity" jdbcType="BIGINT"/>
+            <result property="drugUnit" column="drug_unit" jdbcType="VARCHAR"/>
+            <result property="drugStorage" column="drug_storage" jdbcType="VARCHAR"/>
+            <result property="drugDate" column="drug_date" jdbcType="TIMESTAMP"/>
+            <result property="usefullLife" column="usefull_life" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        drug_id,drug_name,drug_into_price,
+        drug_exit_price,drug_quantity,drug_unit,
+        drug_storage,drug_date,usefull_life
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from drugs
+        where  drug_id = #{drugId,jdbcType=VARCHAR} 
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete from drugs
+        where  drug_id = #{drugId,jdbcType=VARCHAR} 
+    </delete>
+    <insert id="insert" keyColumn="drug_id" keyProperty="drugId" parameterType="com.it.study.domain.entity.Drugs" useGeneratedKeys="true">
+        insert into drugs
+        ( drug_id,drug_name,drug_into_price
+        ,drug_exit_price,drug_quantity,drug_unit
+        ,drug_storage,drug_date,usefull_life
+        )
+        values (#{drugId,jdbcType=VARCHAR},#{drugName,jdbcType=VARCHAR},#{drugIntoPrice,jdbcType=DOUBLE}
+        ,#{drugExitPrice,jdbcType=DOUBLE},#{drugQuantity,jdbcType=BIGINT},#{drugUnit,jdbcType=VARCHAR}
+        ,#{drugStorage,jdbcType=VARCHAR},#{drugDate,jdbcType=TIMESTAMP},#{usefullLife,jdbcType=TIMESTAMP}
+        )
+    </insert>
+    <insert id="insertSelective" keyColumn="drug_id" keyProperty="drugId" parameterType="com.it.study.domain.entity.Drugs" useGeneratedKeys="true">
+        insert into drugs
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="drugId != null">drug_id,</if>
+                <if test="drugName != null">drug_name,</if>
+                <if test="drugIntoPrice != null">drug_into_price,</if>
+                <if test="drugExitPrice != null">drug_exit_price,</if>
+                <if test="drugQuantity != null">drug_quantity,</if>
+                <if test="drugUnit != null">drug_unit,</if>
+                <if test="drugStorage != null">drug_storage,</if>
+                <if test="drugDate != null">drug_date,</if>
+                <if test="usefullLife != null">usefull_life,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="drugId != null">#{drugId,jdbcType=VARCHAR},</if>
+                <if test="drugName != null">#{drugName,jdbcType=VARCHAR},</if>
+                <if test="drugIntoPrice != null">#{drugIntoPrice,jdbcType=DOUBLE},</if>
+                <if test="drugExitPrice != null">#{drugExitPrice,jdbcType=DOUBLE},</if>
+                <if test="drugQuantity != null">#{drugQuantity,jdbcType=BIGINT},</if>
+                <if test="drugUnit != null">#{drugUnit,jdbcType=VARCHAR},</if>
+                <if test="drugStorage != null">#{drugStorage,jdbcType=VARCHAR},</if>
+                <if test="drugDate != null">#{drugDate,jdbcType=TIMESTAMP},</if>
+                <if test="usefullLife != null">#{usefullLife,jdbcType=TIMESTAMP},</if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.it.study.domain.entity.Drugs">
+        update drugs
+        <set>
+                <if test="drugName != null">
+                    drug_name = #{drugName,jdbcType=VARCHAR},
+                </if>
+                <if test="drugIntoPrice != null">
+                    drug_into_price = #{drugIntoPrice,jdbcType=DOUBLE},
+                </if>
+                <if test="drugExitPrice != null">
+                    drug_exit_price = #{drugExitPrice,jdbcType=DOUBLE},
+                </if>
+                <if test="drugQuantity != null">
+                    drug_quantity = #{drugQuantity,jdbcType=BIGINT},
+                </if>
+                <if test="drugUnit != null">
+                    drug_unit = #{drugUnit,jdbcType=VARCHAR},
+                </if>
+                <if test="drugStorage != null">
+                    drug_storage = #{drugStorage,jdbcType=VARCHAR},
+                </if>
+                <if test="drugDate != null">
+                    drug_date = #{drugDate,jdbcType=TIMESTAMP},
+                </if>
+                <if test="usefullLife != null">
+                    usefull_life = #{usefullLife,jdbcType=TIMESTAMP},
+                </if>
+        </set>
+        where   drug_id = #{drugId,jdbcType=VARCHAR} 
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.it.study.domain.entity.Drugs">
+        update drugs
+        set 
+            drug_name =  #{drugName,jdbcType=VARCHAR},
+            drug_into_price =  #{drugIntoPrice,jdbcType=DOUBLE},
+            drug_exit_price =  #{drugExitPrice,jdbcType=DOUBLE},
+            drug_quantity =  #{drugQuantity,jdbcType=BIGINT},
+            drug_unit =  #{drugUnit,jdbcType=VARCHAR},
+            drug_storage =  #{drugStorage,jdbcType=VARCHAR},
+            drug_date =  #{drugDate,jdbcType=TIMESTAMP},
+            usefull_life =  #{usefullLife,jdbcType=TIMESTAMP}
+        where   drug_id = #{drugId,jdbcType=VARCHAR} 
+    </update>
+
+    <select id="selectAllDrugs" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from drugs
+    </select>
+    <select id="selectDrugs" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from drugs
+    </select>
+</mapper>

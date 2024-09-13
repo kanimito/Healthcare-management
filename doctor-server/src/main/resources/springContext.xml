@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+        xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:tx="http://www.springframework.org/schema/tx"
+        xmlns:context="http://www.springframework.org/schema/context"
+        xsi:schemaLocation=" http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+    <!-- 扫描指定包下的所有类，加了spring注解的一律注册为bean -->
+    <context:component-scan base-package="com.it.study"></context:component-scan>
+    <!-- 读取jdbc配置文件 -->
+    <context:property-placeholder location="classpath:jdbc.properties"/>
+    <!-- 配置druid数据源
+              bean生命周期方法init-method=init，让druid在项目一启动的时候就把所有连接创建好
+           -->
+    <!--Jedis连接池的相关配置-->
+    <bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+        <!--新版是maxTotal，旧版是maxActive-->
+        <property name="maxTotal" value="${redis.pool.maxActive}">
+        </property>
+        <property name="maxIdle" value="${redis.pool.maxIdle}">
+        </property>
+        <property name="maxWaitMillis" value="${redis.pool.maxWaitMillis}"/>
+        <property name="testOnBorrow" value="true"/>
+        <property name="testOnReturn" value="true"/>
+    </bean>
+    <bean id="jedisPool" class="redis.clients.jedis.JedisPool">
+        <constructor-arg name="poolConfig" ref="jedisPoolConfig"/>
+        <constructor-arg name="host" value="${jedis.host}"/>
+        <constructor-arg name="port" value="${jedis.port}" type="int"/>
+        <constructor-arg name="timeout" value="${jedis.timeout}" type="int"/>
+    </bean>
+    <bean id="druidDataSource" init-method="init" class="com.alibaba.druid.pool.DruidDataSource">
+        <property name="driverClassName" value="${jdbc.driverClass}"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+        <property name="maxActive" value="${druid.maxActive}"/>
+        <property name="minIdle" value="${druid.minIdle}"/>
+    </bean>
+    <!-- mybatis框架配置 -->
+    <bean id="configuration" class="org.apache.ibatis.session.Configuration">
+        <!-- 自动映射任何复杂的结果集（无论是否嵌套） -->
+        <property name="autoMappingBehavior" value="FULL"/>
+        <!-- 驼峰规则自动映射 -->
+        <property name="mapUnderscoreToCamelCase" value="true"/>
+        <!-- 日志组件使用log4j -->
+        <property name="logImpl" value="org.apache.ibatis.logging.log4j.Log4jImpl"/>
+    </bean>
+    <!-- 配置mybatis整合进spring框架 -->
+    <bean id="sqlSessionFactoryBean" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="druidDataSource"/>
+        <!-- mapper.xml文件存放位置 -->
+        <property name="mapperLocations" value="classpath:mapper/*.xml"/>
+        <!-- mybatis框架配置 -->
+        <property name="configuration" ref="configuration"/>
+        <!--配置分页插件-->
+        <property name="plugins">
+            <array>
+                <bean class="com.github.pagehelper.PageInterceptor">
+                    <property name="properties">
+                        <value>
+                            reasonable=true
+                        </value>
+                    </property>
+                </bean>
+            </array>
+        </property>
+    </bean>
+    <!--  配置Mapper接口的扫描器  -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <!--  配置mapper接口所在的包  -->
+        <property name="basePackage" value="com.it.study.mapper"/>
+        <!-- 注入会话工厂 -->
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactoryBean"/>
+    </bean>
+    <!--  配置jdbc的事务管理器,将事物交给spring帮我们管理  -->
+    <bean name="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <!--  注入数据源  -->
+        <property name="dataSource" ref="druidDataSource"/>
+    </bean>
+    <!--  启用注解事务,在需要使用事务的方法上加特定注解,spring会自动帮我们管理事务  -->
+    <tx:annotation-driven transaction-manager="txManager"/>
+</beans>

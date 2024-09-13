@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.it.study.mapper.PatientMapper">
+
+    <resultMap id="BaseResultMap" type="com.it.study.domain.entity.Patient">
+        <id property="pPatientId" column="p_patient_id" jdbcType="VARCHAR"/>
+        <result property="pAvatar" column="p_avatar" jdbcType="VARCHAR"/>
+        <result property="pUsername" column="p_username" jdbcType="VARCHAR"/>
+        <result property="pName" column="p_name" jdbcType="VARCHAR"/>
+        <result property="pPassword" column="p_password" jdbcType="VARCHAR"/>
+        <result property="role" column="role" jdbcType="VARCHAR"/>
+        <result property="pAge" column="p_age" jdbcType="TINYINT"/>
+        <result property="pSex" column="p_sex" jdbcType="VARCHAR"/>
+        <result property="pTel" column="p_tel" jdbcType="VARCHAR"/>
+        <result property="pEmail" column="p_email" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        p_patient_id
+        ,p_avatar,p_username,
+        p_name,p_password,role,
+        p_age,p_sex,p_tel,
+        p_email
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from patient
+        where p_patient_id = #{pPatientId,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectByUsername" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from patient
+        where p_username = #{username,jdbcType=VARCHAR}
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete
+        from patient
+        where p_patient_id = #{pPatientId,jdbcType=VARCHAR}
+    </delete>
+    <insert id="insert" keyColumn="p_patient_id" keyProperty="pPatientId"
+            parameterType="com.it.study.domain.entity.Patient" useGeneratedKeys="true">
+        insert into patient
+        ( p_patient_id, p_avatar, p_username
+        , p_name, p_password, role
+        , p_age, p_sex, p_tel
+        , p_email)
+        values ( #{pPatientId,jdbcType=VARCHAR}, #{pAvatar,jdbcType=VARCHAR}, #{pUsername,jdbcType=VARCHAR}
+               , #{pName,jdbcType=VARCHAR}, #{pPassword,jdbcType=VARCHAR}, #{role,jdbcType=VARCHAR}
+               , #{pAge,jdbcType=TINYINT}, #{pSex,jdbcType=VARCHAR}, #{pTel,jdbcType=VARCHAR}
+               , #{pEmail,jdbcType=VARCHAR})
+    </insert>
+
+    <insert id="insertSelective" keyColumn="p_username" keyProperty="pUsername"
+            parameterType="com.it.study.domain.entity.Patient" useGeneratedKeys="true">
+        insert into patient
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="pPatientId != null">p_patient_id,</if>
+            <if test="pAvatar != null">p_avatar,</if>
+            <if test="pUsername != null">p_username,</if>
+            <if test="pName != null">p_name,</if>
+            <if test="pPassword != null">p_password,</if>
+            <if test="role != null">role,</if>
+            <if test="pAge != null">p_age,</if>
+            <if test="pSex != null">p_sex,</if>
+            <if test="pTel != null">p_tel,</if>
+            <if test="pEmail != null">p_email,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="pPatientId != null">#{pPatientId,jdbcType=VARCHAR},</if>
+            <if test="pAvatar != null">#{pAvatar,jdbcType=VARCHAR},</if>
+            <if test="pUsername != null">#{pUsername,jdbcType=VARCHAR},</if>
+            <if test="pName != null">#{pName,jdbcType=VARCHAR},</if>
+            <if test="pPassword != null">#{pPassword,jdbcType=VARCHAR},</if>
+            <if test="role != null">#{role,jdbcType=VARCHAR},</if>
+            <if test="pAge != null">#{pAge,jdbcType=TINYINT},</if>
+            <if test="pSex != null">#{pSex,jdbcType=VARCHAR},</if>
+            <if test="pTel != null">#{pTel,jdbcType=VARCHAR},</if>
+            <if test="pEmail != null">#{pEmail,jdbcType=VARCHAR},</if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.it.study.domain.entity.Patient">
+        update patient
+        <set>
+            <if test="pAvatar != null">
+                p_avatar = #{pAvatar,jdbcType=VARCHAR},
+            </if>
+            <if test="pUsername != null">
+                p_username = #{pUsername,jdbcType=VARCHAR},
+            </if>
+            <if test="pName != null">
+                p_name = #{pName,jdbcType=VARCHAR},
+            </if>
+            <if test="pPassword != null">
+                p_password = #{pPassword,jdbcType=VARCHAR},
+            </if>
+            <if test="role != null">
+                role = #{role,jdbcType=VARCHAR},
+            </if>
+            <if test="pAge != null">
+                p_age = #{pAge,jdbcType=TINYINT},
+            </if>
+            <if test="pSex != null">
+                p_sex = #{pSex,jdbcType=VARCHAR},
+            </if>
+            <if test="pTel != null">
+                p_tel = #{pTel,jdbcType=VARCHAR},
+            </if>
+            <if test="pEmail != null">
+                p_email = #{pEmail,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where p_patient_id = #{pPatientId,jdbcType=VARCHAR}
+    </update>
+    <!--    修改用户内容通过用户名-->
+    <update id="updateByUsernameSelective" parameterType="com.it.study.domain.entity.Patient">
+        update patient
+        <set>
+            <if test="pAvatar != null">
+                p_avatar = #{pAvatar,jdbcType=VARCHAR},
+            </if>
+            <if test="pUsername != null">
+                p_username = #{pUsername,jdbcType=VARCHAR},
+            </if>
+            <if test="pName != null">
+                p_name = #{pName,jdbcType=VARCHAR},
+            </if>
+            <if test="pPassword != null">
+                p_password = #{pPassword,jdbcType=VARCHAR},
+            </if>
+            <if test="role != null">
+                role = #{role,jdbcType=VARCHAR},
+            </if>
+            <if test="pAge != null">
+                p_age = #{pAge,jdbcType=TINYINT},
+            </if>
+            <if test="pSex != null">
+                p_sex = #{pSex,jdbcType=VARCHAR},
+            </if>
+            <if test="pTel != null">
+                p_tel = #{pTel,jdbcType=VARCHAR},
+            </if>
+            <if test="pEmail != null">
+                p_email = #{pEmail,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where p_name = #{pName,jdbcType=VARCHAR}
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="com.it.study.domain.entity.Patient">
+        update patient
+        set p_avatar   = #{pAvatar,jdbcType=VARCHAR},
+            p_username = #{pUsername,jdbcType=VARCHAR},
+            p_name     = #{pName,jdbcType=VARCHAR},
+            p_password = #{pPassword,jdbcType=VARCHAR},
+            role       = #{role,jdbcType=VARCHAR},
+            p_age      = #{pAge,jdbcType=TINYINT},
+            p_sex      = #{pSex,jdbcType=VARCHAR},
+            p_tel      = #{pTel,jdbcType=VARCHAR},
+            p_email    = #{pEmail,jdbcType=VARCHAR}
+        where p_patient_id = #{pPatientId,jdbcType=VARCHAR}
+    </update>
+</mapper>

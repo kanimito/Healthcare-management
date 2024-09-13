@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.it.study.mapper.SysUsersMapper">
+
+    <resultMap id="BaseResultMap" type="com.it.study.domain.entity.SysUsers">
+        <id property="id" column="id" jdbcType="INTEGER"/>
+        <result property="username" column="username" jdbcType="VARCHAR"/>
+        <result property="password" column="password" jdbcType="VARCHAR"/>
+        <result property="dId" column="d_id" jdbcType="INTEGER"/>
+        <result property="sex" column="sex" jdbcType="TINYINT"/>
+        <result property="avatar" column="avatar" jdbcType="VARCHAR"/>
+        <result property="realName" column="real_name" jdbcType="VARCHAR"/>
+        <result property="userCode" column="user_code" jdbcType="VARCHAR"/>
+        <result property="accountType" column="account_type" jdbcType="VARCHAR"/>
+        <result property="email" column="email" jdbcType="VARCHAR"/>
+        <result property="mobile" column="mobile" jdbcType="VARCHAR"/>
+        <result property="status" column="status" jdbcType="TINYINT"/>
+        <result property="createdTime" column="created_time" jdbcType="TIMESTAMP"/>
+        <result property="modifiedTime" column="modified_time" jdbcType="TIMESTAMP"/>
+        <result property="gmtAddUser" column="gmt_add_user" jdbcType="VARCHAR"/>
+        <result property="gmtUpdateUser" column="gmt_update_user" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,username,password,d_id,
+        sex,avatar,real_name,user_code,
+        account_type,email,mobile,
+        status,created_time,modified_time,
+        gmt_add_user,gmt_update_user
+    </sql>
+
+    <select id="selectSysUserByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_users
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <select id="selectByUsername" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_users
+        where username = #{username}
+    </select>
+
+    <select id="selectByUserCode" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_users
+        where user_code = #{userCode}
+    </select>
+
+    <select id="selectPageAllUser" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_users
+    </select>
+
+    <select id="getDoctorListByDId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_users
+        where d_id = #{dId}
+    </select>
+
+    <select id="getDoctorListAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_users
+        where account_type = 'doctor'
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete
+        from sys_users
+        where id = #{id}
+    </delete>
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.it.study.domain.entity.SysUsers"
+            useGeneratedKeys="true">
+        insert into sys_users
+        ( id, username, password
+        , sex, real_name, user_code
+        , account_type, email, mobile
+        , status, created_time, modified_time
+        , gmt_add_user, gmt_update_user)
+        values ( null, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}
+               , #{sex,jdbcType=TINYINT}, #{realName,jdbcType=VARCHAR}, #{userCode,jdbcType=VARCHAR}
+               , #{accountType,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}
+               , #{status,jdbcType=TINYINT}, curdate(), curdate()
+               , #{gmtAddUser,jdbcType=VARCHAR}, #{gmtUpdateUser,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.it.study.domain.entity.SysUsers"
+            useGeneratedKeys="true">
+        insert into sys_users
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="username != null">username,</if>
+            <if test="password != null">password,</if>
+            <if test="sex != null">sex,</if>
+            <if test="realName != null">real_name,</if>
+            <if test="userCode != null">user_code,</if>
+            <if test="accountType != null">account_type,</if>
+            <if test="email != null">email,</if>
+            <if test="mobile != null">mobile,</if>
+            <if test="status != null">status,</if>
+            <if test="createdTime != null">created_time,</if>
+            <if test="modifiedTime != null">modified_time,</if>
+            <if test="gmtAddUser != null">gmt_add_user,</if>
+            <if test="gmtUpdateUser != null">gmt_update_user,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id,jdbcType=INTEGER},</if>
+            <if test="username != null">#{username,jdbcType=VARCHAR},</if>
+            <if test="password != null">#{password,jdbcType=VARCHAR},</if>
+            <if test="sex != null">#{sex,jdbcType=TINYINT},</if>
+            <if test="realName != null">#{realName,jdbcType=VARCHAR},</if>
+            <if test="userCode != null">#{userCode,jdbcType=VARCHAR},</if>
+            <if test="accountType != null">#{accountType,jdbcType=VARCHAR},</if>
+            <if test="email != null">#{email,jdbcType=VARCHAR},</if>
+            <if test="mobile != null">#{mobile,jdbcType=VARCHAR},</if>
+            <if test="status != null">#{status,jdbcType=TINYINT},</if>
+            <if test="createdTime != null">#{createdTime,jdbcType=TIMESTAMP},</if>
+            <if test="modifiedTime != null">#{modifiedTime,jdbcType=TIMESTAMP},</if>
+            <if test="gmtAddUser != null">#{gmtAddUser,jdbcType=VARCHAR},</if>
+            <if test="gmtUpdateUser != null">#{gmtUpdateUser,jdbcType=VARCHAR},</if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.it.study.domain.entity.SysUsers">
+        update sys_users
+        <set>
+            <if test="username != null">
+                username = #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="password != null">
+                password = #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="dId != null">
+                d_id = #{dId,jdbcType=TINYINT},
+            </if>
+            <if test="sex != null">
+                sex = #{sex,jdbcType=TINYINT},
+            </if>
+            <if test="avatar != null">
+                avatar = #{avatar,jdbcType=TINYINT},
+            </if>
+            <if test="realName != null">
+                real_name = #{realName,jdbcType=VARCHAR},
+            </if>
+            <if test="userCode != null">
+                user_code = #{userCode,jdbcType=VARCHAR},
+            </if>
+            <if test="accountType != null">
+                account_type = #{accountType,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null">
+                email = #{email,jdbcType=VARCHAR},
+            </if>
+            <if test="mobile != null">
+                mobile = #{mobile,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=TINYINT},
+            </if>
+            <if test="createdTime != null">
+                created_time = #{createdTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="modifiedTime != null">
+                modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="gmtAddUser != null">
+                gmt_add_user = #{gmtAddUser,jdbcType=VARCHAR},
+            </if>
+            <if test="gmtUpdateUser != null">
+                gmt_update_user = #{gmtUpdateUser,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.it.study.domain.entity.SysUsers">
+        update sys_users
+        set username        = #{username,jdbcType=VARCHAR},
+            password        = #{password,jdbcType=VARCHAR},
+            d_id            = #{dId,jdbcType=TINYINT},
+            sex             = #{sex,jdbcType=TINYINT},
+            avatar          = #{avatar,jdbcType=TINYINT},
+            real_name       = #{realName,jdbcType=VARCHAR},
+            user_code       = #{userCode,jdbcType=VARCHAR},
+            account_type    = #{accountType,jdbcType=VARCHAR},
+            email           = #{email,jdbcType=VARCHAR},
+            mobile          = #{mobile,jdbcType=VARCHAR},
+            status          = #{status,jdbcType=TINYINT},
+            created_time    = #{createdTime,jdbcType=TIMESTAMP},
+            modified_time   = #{modifiedTime,jdbcType=TIMESTAMP},
+            gmt_add_user    = #{gmtAddUser,jdbcType=VARCHAR},
+            gmt_update_user = #{gmtUpdateUser,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <select id="selectAllDoctors" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_users
+        where id != 1
+    </select>
+</mapper>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+        xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:mvc="http://www.springframework.org/schema/mvc"
+        xmlns:context="http://www.springframework.org/schema/context"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/mvc
+       http://www.springframework.org/schema/mvc/spring-mvc.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd">
+    <!--对springmvc框架的配置-->
+    <!--开启spring-mvc注解功能-->
+    <mvc:annotation-driven>
+        <mvc:message-converters>
+            <!--字符串内容转换器,避免控制器方法返回字符串乱码-->
+            <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+                <property name="supportedMediaTypes">
+                    <list>
+                        <value>text/plain;charset=utf-8</value>
+                        <value>text/html;charset=UTF-8</value>
+                        <value>application/json;charset=UTF-8</value>
+                    </list>
+                </property>
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+    <!-- 指定扫描控制器所在的包 -->
+    <context:component-scan base-package="com.it.study.controller"/>
+    <!--js,img,css等静态资源dispatcherServlet不进行拦截过滤-->
+    <mvc:default-servlet-handler/>
+    <!--配置jsp页面作为视图展示层-->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <!-- 视图文件的后缀名 -->
+        <property name="suffix" value=".jsp"></property>
+        <!-- jsp视图路径前缀 -->
+        <property name="prefix" value="/WEB-INF/jsp/"></property>
+        <!-- 当前视图解析器使用的优先级 -->
+        <property name="order" value="1"></property>
+    </bean>
+    <!--配置拦截器-->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <!--拦截的url地址pattern-->
+            <mvc:mapping path="/doctor/**/"/>
+            <mvc:exclude-mapping path="/doctor/login"/>
+            <!--配置拦截器bean-->
+            <bean class="com.it.study.infrastructure.mvc.LoginCheckInterceptor"></bean>
+        </mvc:interceptor>
+        <mvc:interceptor>
+            <!--拦截的url地址pattern-->
+            <mvc:mapping path="/patient/**/"/>
+            <mvc:exclude-mapping path="/patient/login"/>
+            <mvc:exclude-mapping path="/patient/register"/>
+            <!--配置拦截器bean-->
+            <bean class="com.it.study.infrastructure.mvc.PatientLoginCheckInterceptor"></bean>
+        </mvc:interceptor>
+    </mvc:interceptors>
+    <!--配置文件上传解析器，如果需要做文件上传功能才做该配置-->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <!--设置数据默认编码格式-->
+        <property name="defaultEncoding" value="UTF-8"/>
+        <!--设置单个文件最大允许上传的大小10mb,单位字节-->
+        <property name="maxUploadSize" value="10485760"/>
+    </bean>
+</beans>
